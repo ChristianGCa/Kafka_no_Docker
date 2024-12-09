@@ -1,12 +1,6 @@
 # Trabalho Kafka no Docker
 
 ## Principais comandos
-
-```bash
-```
-
-
-
 Construir e iniciar os containers:
 ```bash
 docker compose up
