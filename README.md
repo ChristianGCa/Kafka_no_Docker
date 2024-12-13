@@ -1,6 +1,50 @@
 # Trabalho Kafka no Docker
+## Dupla:
+- Christian Gabriel Candeloni
+- Leonardo Daniel Becker
 
-## Principais comandos
+## Requisitos
+Instale o docker, disponível em https://www.docker.com/
+
+## Execução
+Primeiramente, navegue até o diretório do projeto (onde está localizado o docker-compose.yml) e construa e inicie os containers com:
+```bash
+docker compose up
+```
+Em outro terminal, execute o programa producer.py no container python para produzir mensagens:
+```bash
+docker exec -it python python /app/producer.py
+```
+Abra mais um terminal e execute o programa consumer.py no mesmo container, para ler as mensagens:
+```bash
+docker exec -it python python /app/consumer.py
+```
+Para derrubar um broker, (kafka-2, no caso) execute:
+```bash
+docker stop kafka-2
+```
+O comportamento esperado é que as mensagens continuem sendo enviadas por outro broker elegido em uma nova eleição de líder feito pelo Zookeeper.
+Para executar novamente o nodo derrubado, execute:
+
+```bash
+docker start kafka-2
+```
+Para verificar se o broker derrubado voltou a funcionar no cluster, execute:
+```bash
+docker exec -it kafka-1 kafka-broker-api-versions --bootstrap-server kafka-1:9092
+```
+## Leitura em grupo
+Enquanto o programa producer.py estiver sendo executado, abra um novo terminal na pasta do projeto e acesse o terminal de um broker (kafka-3, por exemplo):
+```bash
+docker exec -it kafka-3 bash
+```
+Então, execute o comando abaixo para poder escrever mensagens para o tópico:
+```bash
+kafka-console-producer --topic frutas --bootstrap-server kafka-3:9094
+```
+É esperado que as mensagens digitadas apareçam entre as geradas pelo producer.py. Podemos visualizar isso observando o terminal onde está o consumer.py sendo executado.
+
+## Comandos úteis
 Construir e iniciar os containers:
 ```bash
 docker compose up
